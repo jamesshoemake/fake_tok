@@ -20,6 +20,18 @@ const VideoCard: NextPage<IProps> = ({ post }) => {
 
   const [isVideoMuted, setIsVideoMuted] = React.useState(false);
 
+  const videoRef = React.useRef<HTMLVideoElement>(null);
+
+  const onVideoPress = () => {
+    if (playing) {
+      videoRef?.current?.pause();
+      setPlaying(false);
+    } else {
+      videoRef?.current?.play();
+      setPlaying(true);
+    }
+  };
+
   return (
     <div className="flex flex-col border-b-2 border-gray-200 pb-6">
       <div>
@@ -65,30 +77,31 @@ const VideoCard: NextPage<IProps> = ({ post }) => {
           }}
           className="rounded-3xl"
         >
-          <Link href="/">
+          <Link href={`/detail/${post._id}`}>
             <video
+              ref={videoRef}
               src={post.video.asset.url}
               loop
               className="lg:w-[600px] h-[300px] md:h-[400px] lg:h-[530px] w-[200px] rounded-2xl cursor-pointer bg-gray-100"
             ></video>
           </Link>
           {isHover && (
-            <div>
+            <div className="absolute bottom-6 cursor-pointer left-8 md:left-14 lg:left-0 flex gap-10 lg:justfiy-between w-[100px] md:w-[50px] p-3">
               {playing ? (
-                <button>
+                <button onClick={onVideoPress}>
                   <BsFillPauseFill className="text-black text-2xl lg:text-4xl" />
                 </button>
               ) : (
-                <button>
+                <button onClick={onVideoPress}>
                   <BsFillPlayFill className="text-black text-2xl lg:text-4xl" />
                 </button>
               )}
               {isVideoMuted ? (
-                <button>
+                <button onClick={() => setIsVideoMuted(false)}>
                   <HiVolumeOff className="text-black text-2xl lg:text-4xl" />
                 </button>
               ) : (
-                <button>
+                <button onClick={() => setIsVideoMuted(true)}>
                   <HiVolumeUp className="text-black text-2xl lg:text-4xl" />
                 </button>
               )}
