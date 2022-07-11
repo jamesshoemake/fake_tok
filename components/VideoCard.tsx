@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { NextPage } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -32,6 +32,12 @@ const VideoCard: NextPage<IProps> = ({ post }) => {
     }
   };
 
+  useEffect(() => {
+    if (videoRef?.current) {
+      videoRef.current.muted = isVideoMuted;
+    }
+  }, [isVideoMuted]);
+
   return (
     <div className="flex flex-col border-b-2 border-gray-200 pb-6">
       <div>
@@ -43,7 +49,6 @@ const VideoCard: NextPage<IProps> = ({ post }) => {
                   width={62}
                   height={62}
                   className="rounded-full"
-                  // src={post.postedBy.image}
                   src={lechonk}
                   alt="profile shoot"
                   layout="responsive"
